@@ -1,0 +1,7 @@
+{
+  "name": "DI04_TE01_Plantilla_2627",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparativa TA02 - TE01</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6b7a;
+      --line: #dbe2ea;
+      --panel: #ffffff;
+      --soft: #f4f7fa;
+      --blue: #1769aa;
+      --blue-soft: #e8f2fb;
+      --green: #18794e;
+      --green-soft: #e7f5ee;
+      --amber: #9a6700;
+      --amber-soft: #fff5d9;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+      --shadow: 0 10px 28px rgba(23, 32, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef3f7;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      line-height: 1.55;
+    }
+
+    .hero {
+      padding: 54px 7vw 46px;
+      color: white;
+      background: linear-gradient(125deg, #123b5d, #1769aa 58%, #2b8a78);
+    }
+
+    .hero-inner, main { max-width: 1180px; margin: 0 auto; }
+    .eyebrow { margin: 0 0 10px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; opacity: 0.8; }
+    h1 { max-width: 760px; margin: 0; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.05; }
+    .subtitle { max-width: 760px; margin: 18px 0 0; color: #dbeeff; font-size: 1.08rem; }
+
+    main { padding: 28px 20px 64px; }
+    section { margin-top: 28px; }
+    h2 { margin: 0 0 14px; font-size: 1.55rem; }
+    h3 { margin: 0 0 8px; font-size: 1.08rem; }
+    p { margin: 8px 0; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .metric, .panel, .change { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+    .metric { padding: 20px; }
+    .metric strong { display: block; color: var(--blue); font-size: 2rem; line-height: 1; }
+    .metric span { display: block; margin-top: 8px; color: var(--muted); font-size: 0.9rem; }
+
+    .panel { padding: 22px; }
+    .note { border-left: 4px solid var(--blue); background: var(--blue-soft); padding: 14px 16px; }
+    .note strong { color: #104b7c; }
+
+    .table-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: white; background: #214e70; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: 0; }
+    code { color: #123b5d; background: #edf2f6; border-radius: 4px; padding: 2px 5px; font-family: Consolas, monospace; font-size: 0.88em; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tag { display: inline-block; border-radius: 999px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; }
+    .tag-add { color: var(--green); background: var(--green-soft); }
+    .tag-remove { color: var(--red); background: var(--red-soft); }
+    .tag-change { color: var(--amber); background: var(--amber-soft); }
+
+    .change-list { display: grid; gap: 14px; }
+    .change { padding: 20px 22px; border-left: 5px solid var(--blue); }
+    .change h3 { color: #164b70; }
+    .change ul { margin: 10px 0 0; padding-left: 21px; }
+    .change li + li { margin-top: 5px; }
+    .path { margin: 8px 0; color: var(--muted); font-family: Consolas, monospace; font-size: 0.88rem; word-break: break-word; }
+
+    .flow { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; }
+    .flow-box { min-height: 150px; padding: 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); box-shadow: var(--shadow); }
+    .flow-box.ta { border-top: 5px solid #d97706; }
+    .flow-box.te { border-top: 5px solid var(--green); }
+    .arrow { color: var(--blue); font-size: 2rem; font-weight: 700; }
+
+    footer { max-width: 1180px; margin: 0 auto; padding: 0 20px 40px; color: var(--muted); font-size: 0.86rem; }
+
+    @media (max-width: 760px) {
+      .hero { padding: 38px 20px; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); text-align: center; }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero { padding: 28px 0; color: black; background: white; border-bottom: 3px solid #1769aa; }
+      .subtitle { color: #333; }
+      main { padding: 20px 0; }
+      .metric, .panel, .change, .table-wrap, .flow-box { box-shadow: none; }
+      .change, .panel, .flow-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Informe de comparación</p>
+      <h1>Cambios entre TA02 y TE01</h1>
+      <p class="subtitle">Comparativa de <strong>DI04_TA02_2627</strong> frente a <strong>DI04_TE01_Plantilla_2627</strong>. Se han ignorado las carpetas <code>node_modules</code>, <code>.angular</code> y <code>.git</code>.</p>
+    </div>
+  </header>
+
+  <main>
+    <section aria-labelledby="resumen">
+      <h2 id="resumen">Resumen del cambio</h2>
+      <div class="summary-grid">
+        <div class="metric"><strong>4</strong><span>Archivos exclusivos de TA</span></div>
+        <div class="metric"><strong>2</strong><span>Archivos exclusivos de TE</span></div>
+        <div class="metric"><strong>11</strong><span>Archivos comunes modificados</span></div>
+        <div class="metric"><strong>0</strong><span>Cambios de dependencias</span></div>
+      </div>
+      <div class="note" style="margin-top: 16px;">
+        <strong>Idea principal:</strong> TA contiene una primera prueba de comunicación con el servidor mediante <code>/api/eco</code>. TE elimina esa prueba y completa la generación de informes PDF con gráficos, filtros, portada, cabecera y pie de página.
+      </div>
+    </section>
+
+    <section aria-labelledby="flujo">
+      <h2 id="flujo">Evolución funcional</h2>
+      <div class="flow">
+        <div class="flow-box ta">
+          <h3>TA02: prueba de servidor</h3>
+          <p>El usuario escribe un mensaje en una pantalla específica.</p>
+          <p>Angular lo envía a <code>POST /api/eco</code> y muestra la respuesta o el error.</p>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="flow-box te">
+          <h3>TE01: informe PDF completo</h3>
+          <p>Angular genera el HTML, filtros y gráficos en Base64.</p>
+          <p>Puppeteer recibe el HTML y devuelve un PDF maquetado.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="archivos">
+      <h2 id="archivos">Archivos añadidos o eliminados</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Estado</th><th>Archivo</th><th>Dónde se utiliza</th><th>Qué aporta</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-add">Solo TA</span></td>
+              <td><code>src/app/prueba-servidor/prueba-servidor.page.ts</code></td>
+              <td>Página lazy <code>/prueba-servidor</code></td>
+              <td>Lógica del formulario, envío del mensaje y gestión de respuesta, fecha y error.</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-add">Solo TA</span></td>
+              <td><code>src/app/prueba-servidor/prueba-servidor.page.html</code></td>
+              <td>Vista de la página de prueba</td>
+              <td>Campo de texto, botón de envío y mensajes de éxito o error.</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-add">Solo TA</span></td>
+              <td><code>src/app/prueba-servidor/prueba-servidor.page.scss</code></td>
+              <td>Estilos de la página de prueba</td>
+              <td>Archivo existente, pero vacío.</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-add">Solo TA</span></td>
+              <td><code>src/app/services/servidor.service.ts</code></td>
+              <td>Servicio utilizado por la pantalla de prueba</td>
+              <td>Define <code>probarConexion()</code> y llama a <code>/api/eco</code>.</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-remove">Solo TE</span></td>
+              <td><code>src/app/services/graficos-informe.service.ts</code></td>
+              <td>Utilizado desde <code>home.page.ts</code></td>
+              <td>Crea cuatro gráficos Chart.js y los convierte en imágenes Base64 para el PDF.</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-remove">Solo TE</span></td>
+              <td><code>server/index.js</code></td>
+              <td>Servidor alternativo no utilizado</td>
+              <td>Implementación JavaScript equivalente del servidor PDF. La aplicación utiliza <code>index.ts</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="funcionales">
+      <h2 id="funcionales">Cambios funcionales por archivo</h2>
+      <div class="change-list">
+        <article class="change">
+          <h3>Rutas y página principal</h3>
+          <p class="path">src/app/app.routes.ts</p>
+          <ul>
+            <li>TE elimina la ruta lazy <code>/prueba-servidor</code>.</li>
+            <li>La ruta deja de estar disponible desde la navegación de la aplicación.</li>
+          </ul>
+          <p class="path">src/app/home/home.page.ts</p>
+          <ul>
+            <li>Elimina la importación y el uso de <code>RouterLink</code>.</li>
+            <li>Añade la inyección de <code>GraficosInformeService</code>.</li>
+            <li>Durante la exportación crea cuatro imágenes de gráficos con los restaurantes filtrados.</li>
+            <li>Pasa restaurantes, imágenes y filtros a <code>InformeService</code>.</li>
+            <li>Actualiza el mensaje mostrado cuando el servidor de informes no está disponible.</li>
+          </ul>
+          <p class="path">src/app/home/home.page.html</p>
+          <ul>
+            <li>Elimina el botón “Probar servidor”.</li>
+            <li>Actualiza el texto del botón de PDF para indicar que incluye tabla y gráficos.</li>
+            <li>Documenta que el PDF no depende del segmento visual de gráficos.</li>
+          </ul>
+        </article>
+
+        <article class="change">
+          <h3>Generación del informe en Angular</h3>
+          <p class="path">src/app/services/informe.service.ts</p>
+          <ul>
+            <li>Cambia la inyección de dependencias a constructor.</li>
+            <li>Amplía la firma de <code>generarInformePDF()</code> para recibir <code>imagenesGraficos</code>.</li>
+            <li>Entrega las imágenes a <code>InformeHtmlService</code> antes de llamar al backend.</li>
+            <li>Mantiene la descarga del Blob PDF con fecha en el nombre del archivo.</li>
+          </ul>
+          <p class="path">src/app/services/informe-html.service.ts</p>
+          <ul>
+            <li>El método <code>construirHTML()</code> recibe imágenes además de restaurantes y filtros.</li>
+            <li>Añade portada, fecha, número de restaurantes y resumen de filtros.</li>
+            <li>Añade una tabla de restaurantes seleccionados.</li>
+            <li>Añade cuatro gráficos: territorios, distinciones, tipos y localidades.</li>
+            <li>Incluye estilos específicos para impresión, saltos de página y cuadrícula de gráficos.</li>
+          </ul>
+        </article>
+
+        <article class="change">
+          <h3>Servidor y generación del PDF</h3>
+          <p class="path">server/index.ts</p>
+          <ul>
+            <li>Elimina la ruta de prueba <code>POST /api/eco</code>.</li>
+            <li>Conserva <code>POST /api/informe</code> como única ruta funcional.</li>
+            <li>Aumenta el límite de cuerpos JSON de <code>10mb</code> a <code>25mb</code> para aceptar gráficos Base64.</li>
+            <li>Añade cabecera y pie repetidos en cada página del PDF.</li>
+            <li>Añade número de página, total de páginas y márgenes específicos.</li>
+            <li>Mantiene una instancia compartida de Chromium y cierra cada pestaña al terminar.</li>
+            <li>Usa <code>waitUntil: 'load'</code> al cargar el HTML.</li>
+          </ul>
+          <p class="path">server/index.js</p>
+          <ul>
+            <li>TE contiene una implementación JavaScript del servidor, pero está marcada como no utilizada.</li>
+            <li>Esta versión usa <code>waitUntil: 'networkidle0'</code>.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="configuracion">
+      <h2 id="configuracion">Configuración y diferencias menores</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Archivo</th><th>Tipo</th><th>Cambio TA → TE</th><th>Impacto</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>package.json</code></td><td>Identidad</td><td>Nombre del proyecto cambia a <code>DI04_TE01_Plantilla_2627</code>.</td><td>Identificativo.</td></tr>
+            <tr><td><code>package-lock.json</code></td><td>Identidad</td><td>Actualiza el nombre en la raíz y en el paquete principal.</td><td>No cambia dependencias.</td></tr>
+            <tr><td><code>capacitor.config.ts</code></td><td>Identidad</td><td>Cambia <code>appName</code>.</td><td>Nombre de la aplicación Capacitor.</td></tr>
+            <tr><td><code>ionic.config.json</code></td><td>Identidad</td><td>Cambia <code>name</code>.</td><td>Nombre mostrado por Ionic.</td></tr>
+            <tr><td><code>server/package.json</code></td><td>Documentación</td><td>Describe el backend como generador de PDFs con Puppeteer.</td><td>Sin efecto en ejecución.</td></tr>
+            <tr><td><code>src/main.ts</code></td><td>Formato</td><td>Separa en dos líneas los proveedores de Firestore y Auth.</td><td>Sin cambio funcional.</td></tr>
+            <tr><td><code>typings/cordova-typings.d.ts</code></td><td>Orden</td><td>Intercambia el orden de las referencias JQuery y Cordova.</td><td>Sin cambio funcional detectado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="sin-cambios">
+      <h2 id="sin-cambios">Archivos sin cambios relevantes</h2>
+      <div class="panel">
+        <p>Se mantienen iguales la interfaz <code>restaurante.ts</code>, <code>restaurante.service.ts</code>, los componentes de gráficos visibles, el modal de restaurantes, estilos globales, variables de tema, datos JSON, entornos Firebase, configuración Angular/TypeScript y los tests existentes.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Comparación realizada entre TA02 y TE01. Dependencias y artefactos generados excluidos del análisis.
+  </footer>
+</body>
+</html>
