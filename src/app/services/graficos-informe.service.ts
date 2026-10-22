@@ -95,14 +95,19 @@ export class GraficosInformeService {
     // contar() agrupa y ordena de mayor a menor. Después, cada tupla se separa
     // en etiquetas (territorios) y valores (número de restaurantes), que es la
     // estructura que Chart.js necesita para un gráfico de barras.
+
+    // Hacemos uso del método contar() para agrupar y ordenar de mayor a menor según el parámetro que
+    // valores será del tipo [string, number][]. Por ejemplo: [['Araba', 5],['Bizkaia', 10],['Gipuzkoa', 20]]
     const valores = this.contar(data, restaurante => restaurante.territory?.trim() || 'Desconocido');
     return {
       type: 'bar',
       data: {
-        labels: valores.map(([nombre]) => nombre),
+        // TODO - Para labels, recogeremos solo el primer valor string y haremos uso de un map para crear un objeto como ['Araba', 'Bizkaia', 'Gipuzkoa']
+        labels: [],
         datasets: [{
           label: 'Restaurantes',
-          data: valores.map(([, cantidad]) => cantidad),
+          // TODO - Para data, recogeremos solo el segundo valor number y haremos uso de un map para crear un objeto como [5, 10, 20]
+          data: [],
           backgroundColor: valores.map((_, index) => `${this.colors[index % this.colors.length]}bb`),
           borderColor: valores.map((_, index) => this.colors[index % this.colors.length]),
           borderWidth: 2,
@@ -110,7 +115,9 @@ export class GraficosInformeService {
           borderSkipped: false,
         }],
       },
-      options: this.opcionesConEjes('Restaurantes por territorio', 'y'),
+
+      // TODO - Para options haremos uso del método opcionesConEjes, para mostrar las barras en eje x o y
+      options: {},
     };
   }
 
@@ -120,35 +127,49 @@ export class GraficosInformeService {
     // En esta gráfica hay dos valores por territorio. Por eso usamos un Map
     // cuyo valor es un objeto acumulador, en lugar del contador simple de las
     // gráficas anteriores.
+
+    // porTerritorio será algo así ---->  Map {"Bizkaia" => {michelin: 10, respsol 20} }
     const porTerritorio = new Map<string, { michelin: number; repsol: number }>();
     data.forEach(restaurante => {
       const territorio = restaurante.territory?.trim() || 'Desconocido';
+
+      //DONE - Si el territorio existe coge los valores michelin y repsol de ese territorio
+      // valores será del tipo ---> valores: { michelin: number; repsol: number; }
       const valores = porTerritorio.get(territorio) ?? { michelin: 0, repsol: 0 };
-      // Los datos pueden llegar como texto desde el JSON. Number() los
-      // convierte para poder sumarlos y || 0 evita introducir NaN.
-      valores.michelin += Number(restaurante.michelinStar) || 0;
-      valores.repsol += Number(restaurante.repsolSun) || 0;
-      porTerritorio.set(territorio, valores);
+      // Los datos pueden llegar como texto desde el JSON. Number() los convierte para poder sumarlos y || 0 evita introducir NaN.
+      // TODO - Actualizar las estrellas michelin y respol con los valores del restaurante actual
+      
+      // TODO - Realizar el set en porTerritorio. Mediante set, si existe un elemento con la misma key, se actualiza su valor.
+
     });
+
     // Se omiten territorios sin estrellas ni soles para evitar series vacías y
     // conseguir que el gráfico solo muestre categorías con información útil.
     const valores = [...porTerritorio.entries()]
       .filter(([, cantidad]) => cantidad.michelin > 0 || cantidad.repsol > 0)
       .sort(([territorioA], [territorioB]) => territorioA.localeCompare(territorioB));
 
+    // TODO - Crear gráfica de tipo line
     return {
       type: 'line',
       data: {
-        labels: valores.map(([nombre]) => nombre),
+        // TODO - Para labels, recogeremos solo el primer valor string y haremos uso de un map para crear un objeto como ['Araba', 'Bizkaia', 'Gipuzkoa']
+        labels: [],
+        // TODO - Necesitamos dos datasets, uno para michelin y otro para repsol
+        // Añadir a cada uno un borderColor, backgroundColor, fill, tension y pointRadius
         datasets: [
-          { label: 'Estrellas Michelin', data: valores.map(([, cantidad]) => cantidad.michelin), borderColor: '#eb445a', backgroundColor: '#eb445a22', fill: true, tension: 0.4, pointRadius: 5 },
-          { label: 'Soles Repsol', data: valores.map(([, cantidad]) => cantidad.repsol), borderColor: '#ffc409', backgroundColor: '#ffc40922', fill: true, tension: 0.4, pointRadius: 5 },
+          //{ },
+          //{ },
         ],
       },
       options: {
         responsive: false,
         animation: false,
-        plugins: { legend: { display: true, position: 'top' }, title: { display: true, text: 'Distinciones gastronómicas por territorio', font: { size: 18, weight: 'bold' }, color: '#333' } },
+        /* TODO - En el apartado plugins:
+         * ---> añadir una leyenda en la parte de arriba
+         * ---> añadir un title con text 'Distinciones gastronómicas por territorio', con font darle un size y weight bold y con color un color
+         */
+        plugins: { },
         scales: { y: { beginAtZero: true, ticks: { stepSize: 1, color: '#555' } }, x: { ticks: { color: '#555' }, grid: { display: false } } },
       },
     };
@@ -158,12 +179,22 @@ export class GraficosInformeService {
     // TODO - Agrupar por tipo de establecimiento y configurar las barras.
     // Se reutiliza la misma función de conteo, cambiando únicamente la
     // propiedad del restaurante que se utiliza como categoría.
+
+    // DONE - Hacemos uso de contar para que nos devuelva la lista de tipos de restaurantes ordenados
     const valores = this.contar(data, restaurante => restaurante.restorationType?.trim() || 'Desconocido');
     return {
       type: 'bar',
       data: {
-        labels: valores.map(([nombre]) => nombre),
-        datasets: [{ label: 'Restaurantes', data: valores.map(([, cantidad]) => cantidad), backgroundColor: valores.map((_, index) => `${this.colors[index % this.colors.length]}bb`), borderColor: valores.map((_, index) => this.colors[index % this.colors.length]), borderWidth: 2, borderRadius: 6 }],
+        // TODO - Para labels, recogeremos solo el primer valor string y haremos uso de un map para crear un objeto como ['Araba', 'Bizkaia', 'Gipuzkoa']
+        labels: [],
+        datasets: [{ 
+          label: 'Restaurantes', 
+          // TODO - Para data, recogeremos solo el segundo valor number y haremos uso de un map para crear un objeto como [5, 10, 20]
+          data: [], 
+          backgroundColor: valores.map((_, index) => `${this.colors[index % this.colors.length]}bb`), 
+          borderColor: valores.map((_, index) => this.colors[index % this.colors.length]), 
+          borderWidth: 2, 
+          borderRadius: 6 }],
       },
       options: this.opcionesConEjes('Restaurantes por tipo de establecimiento', 'x', 'y'),
     };
@@ -177,15 +208,32 @@ export class GraficosInformeService {
     return {
       type: 'doughnut',
       data: {
-        labels: valores.map(([nombre]) => nombre),
-        datasets: [{ data: valores.map(([, cantidad]) => cantidad), backgroundColor: valores.map((_, index) => `${this.colors[index % this.colors.length]}bb`), borderColor: valores.map((_, index) => this.colors[index % this.colors.length]), borderWidth: 2, hoverOffset: 10 }],
+        // TODO - Para labels, recogeremos solo el primer valor string y haremos uso de un map para crear un objeto como ['Araba', 'Bizkaia', 'Gipuzkoa']
+        labels: [],
+        datasets: [{ 
+          // TODO - Para data, recogeremos solo el segundo valor number y haremos uso de un map para crear un objeto como [5, 10, 20]
+          data: [], 
+          backgroundColor: valores.map((_, index) => `${this.colors[index % this.colors.length]}bb`), 
+          borderColor: valores.map((_, index) => this.colors[index % this.colors.length]), 
+          borderWidth: 2, 
+          hoverOffset: 10 }],
       },
-      options: { responsive: false, animation: false, plugins: { legend: { position: 'right', labels: { padding: 12, usePointStyle: true, font: { size: 13 }, color: '#333' } }, title: { display: true, text: 'Top 10 localidades con más restaurantes', font: { size: 18, weight: 'bold' }, color: '#333' } } },
+      options: { 
+        responsive: false, 
+        animation: false,
+        /* TODO - En el apartado plugins:
+         * ---> añadir una leyenda en la parte de la derecha y mediante labels configurar el padding, usePointStyle, font y color
+         * ---> añadir un title con text 'Distinciones gastronómicas por territorio', con font darle un size y weight bold y con color un color
+         */ 
+        plugins: { 
+          
+        } 
+      },
     };
   }
 
   private contar(data: Restaurante[], obtenerClave: (restaurante: Restaurante) => string): [string, number][] {
-    // TODO - Reutilizar este contador para agrupar datos y ordenar las categorías.
+    // DONE - Reutilizar este contador para agrupar datos y ordenar las categorías.
     // obtenerClave permite reutilizar el algoritmo: cambia la propiedad a
     // agrupar (territorio, tipo o localidad), pero no el código de conteo.
     // El resultado es una lista de pares [nombre, cantidad], ordenada de mayor
